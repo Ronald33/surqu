@@ -1,31 +1,29 @@
 <?php
-require_once(__DIR__ . '/../dao/IPersonaDAO.php');
+require_once(__DIR__ . '/../dao/IDatoDAO.php');
 
-class PersonaDAO implements IPersonaDAO
+class DatoDAO implements IDatoDAO
 {
-    private static $table = 'personas';
+    private static $table = 'datos';
 
     private static $selected_fields = array
     (
-        'pers_id' => 'id',
-        'pers_nombres' => 'nombres',
-        'pers_apellidos' => 'apellidos',
-        'pers_documento' => 'documento',
-        'pers_email' => 'email', 
-        'pers_telefono' => 'telefono',
-        'pers_direccion' => 'direccion'
+        'dato_id' => 'id',
+        'dato_fecha' => 'fecha', 
+        'dato_presion' => 'presion', 
+        'dato_humedad' => 'humedad', 
+        'dato_temperatura' => 'temperatura', 
+        'dato_temperatura_interna' => 'temperaturaInterna'
     );
 
-	private static function getFieldsToInsert(Persona $persona)
+	private static function getFieldsToInsert(Dato $dato)
 	{
         $fields = array
 		(
-			'pers_nombres' => $persona->getNombres(),
-			'pers_apellidos' => $persona->getApellidos(),
-			'pers_documento' => $persona->getDocumento(),
-            'pers_email' => $persona->getEmail(), 
-			'pers_telefono' => $persona->getTelefono(),
-            'pers_direccion' => $persona->getDireccion()
+			'dato_fecha' => $dato->getFecha(), 
+			'dato_presion' => $dato->getPresion(), 
+			'dato_humedad' => $dato->getHumedad(), 
+			'dato_temperatura' => $dato->getTemperatura(), 
+			'dato_temperatura_interna' => $dato->getTemperaturaInterna()
         );
 
 		return $fields;
@@ -33,7 +31,7 @@ class PersonaDAO implements IPersonaDAO
     
     private function setSubItems(&$row)
     {
-        
+        $riw = Helper::cast('Dato', $row);
     }
 
     public function selectAll()
@@ -48,7 +46,7 @@ class PersonaDAO implements IPersonaDAO
     {
         $db = Repository::getDB();
         $fields = self::$selected_fields;
-        $where = 'pers_id = :id';
+        $where = 'dato_id = :id';
         $replacements = array('id' => $id);
         $results = $db->select(self::$table, $fields, $where, $replacements);
         if(sizeof($results) == 1) { $this->setSubItems($results[0]); return $results[0]; }
@@ -58,7 +56,7 @@ class PersonaDAO implements IPersonaDAO
     public function selectFiltered($filter)
     {
         $db = Repository::getDB();
-        $where = 'pers_nombres LIKE :filter OR pers_apellidos LIKE :filter OR pers_documento LIKE :filter';
+        $where = 'dato_nombres LIKE :filter OR dato_apellidos LIKE :filter OR dato_documento LIKE :filter';
         $replacements = ['filter' => '%' . $filter . '%'];
         $results = $db->select(self::$table, self::$selected_fields, $where, $replacements);
         array_walk($results, array($this, 'setSubItems'));
@@ -68,34 +66,34 @@ class PersonaDAO implements IPersonaDAO
     // public function selectByDocumento($documento)
     // {
     //     $db = Repository::getDB();
-    //     $where = 'pers_documento = :documento';
+    //     $where = 'dato_documento = :documento';
     //     $replacements = array('documento' => $documento);
     //     $results = $db->select(self::$table, self::$selected_fields, $where, $replacements);
     //     if(sizeof($results) == 1) { return $results[0]; }
     //     else { return NULL; }
     // }
 
-    public function insert(Persona $persona)
+    public function insert(Dato $dato)
     {
         $db = Repository::getDB();
-        $data = self::getFieldsToInsert($persona);
+        $data = self::getFieldsToInsert($dato);
         $db->insert(self::$table, $data);
-        $persona->setId($db->getLastInsertId());
+        $dato->setId($db->getLastInsertId());
     }
 
-    public function update(Persona $persona)
+    public function update(Dato $dato)
     {
         $db = Repository::getDB();
-        $replacements = self::getFieldsToInsert($persona);
-        $where = 'pers_id = :id';
-        $data = array('id' => $persona->getId());
+        $replacements = self::getFieldsToInsert($dato);
+        $where = 'dato_id = :id';
+        $data = array('id' => $dato->getId());
         $db->update(self::$table, $replacements, $where, $data);
     }
 
     public function delete($id)
     {
         $db = Repository::getDB();
-        $where = 'pers_id = :id';
+        $where = 'dato_id = :id';
         $data = array('id' => $id);
         $db->delete(self::$table, $where, $data);
     }
