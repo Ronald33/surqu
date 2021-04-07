@@ -203,7 +203,7 @@
 											"top": 122,
 											"width": 153.1943359375,
 											"height": 13,
-											"text": "-temperatura_interna: float",
+											"text": "-temperaturaInterna: float",
 											"horizontalAlignment": 0
 										}
 									],
@@ -339,7 +339,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF4rmTfO5l7LjE="
 							},
-							"name": "temperatura_interna",
+							"name": "temperaturaInterna",
 							"visibility": "private",
 							"type": "float"
 						}
