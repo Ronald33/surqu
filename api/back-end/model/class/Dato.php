@@ -56,7 +56,7 @@ class Dato implements JsonSerializable
      */ 
     public function setFecha($fecha)
     {
-        $this->fecha = $fecha;
+        $this->fecha = Helper::getDateTimeFromTimestamp($fecha);
 
         return $this;
     }
@@ -140,4 +140,6 @@ class Dato implements JsonSerializable
 
         return $this;
     }
+
+    public function jsonSerialize() { return get_object_vars($this); }
 }

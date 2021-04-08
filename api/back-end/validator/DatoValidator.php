@@ -1,15 +1,13 @@
 <?php
-abstract class PersonaValidator
+abstract class DatoValidator
 {
-    public static function validate($data)
+    public static function validate()
     {
         $validator = Repository::getValidator();
-        $validator->addInputFromObject('Nombres', $data, 'nombres')->addRule('isWords')->addRule('lengthIsLessThan', 128);
-        $validator->addInputFromObject('Apellidos', $data, 'apellidos')->addRule('isWords')->addRule('lengthIsLessThan', 128);
-        $validator->addInputFromObject('Documento', $data, 'documento', false)->addRule('lengthIsLessThan', 16)->addRule('isUnique', 'personas', 'pers_documento', isset($data->id) ? 'pers_id != ' . $data->id : '1');
-        $validator->addInputFromObject('Email', $data, 'email', false)->addRule('isEmail')->addRule('lengthIsLessThan', 64);
-        $validator->addInputFromObject('Telefono', $data, 'telefono', false)->addRule('lengthIsLessThan', 16);
-        $validator->addInputFromObject('Dirección', $data, 'direccion', false)->addRule('lengthIsLessThan', 128);
+        $validator->addInputFromArray('Presión', $_GET, 'presion')->addRule('isFloat');
+        $validator->addInputFromArray('Humedad', $_GET, 'humedad')->addRule('isFloat');
+        $validator->addInputFromArray('Temperatura', $_GET, 'temperatura')->addRule('isFloat');
+        $validator->addInputFromArray('Temperatura interna', $_GET, 'temperaturaInterna')->addRule('isFloat');
         
         if($validator->isValid()) { return true; }
         else { return $validator->getInputsWithErrors(); }

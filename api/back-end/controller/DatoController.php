@@ -18,7 +18,13 @@ class DatoController
             if($result == NULL) { $this->view->s404(); }
             else { $this->view->s200($result); }
         }
-        else if(isset($_GET['filter'])) { $this->view->s200($this->dao->selectFiltered($_GET['filter'])); }
+        else if(isset($_GET['presion']) && isset($_GET['humedad']) && isset($_GET['temperatura']) && isset($_GET['temperaturaInterna']))
+        {
+            $dato = DatoHelper::castToDato();
+            $this->dao->insert($dato);
+            $this->view->s201($dato);
+        }
+        // else if(isset($_GET['filter'])) { $this->view->s200($this->dao->selectFiltered($_GET['filter'])); }
         else { $this->view->s200($this->dao->selectAll()); }
     }
 
