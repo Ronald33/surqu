@@ -8,7 +8,7 @@ class DatoDAO implements IDatoDAO
     private static $selected_fields = array
     (
         'dato_id' => 'id',
-        'dato_fecha' => 'fecha', 
+        'UNIX_TIMESTAMP(dato_fecha)' => 'fecha', 
         'dato_presion' => 'presion', 
         'dato_humedad' => 'humedad', 
         'dato_temperatura' => 'temperatura', 
@@ -51,6 +51,16 @@ class DatoDAO implements IDatoDAO
         $results = $db->select(self::$table, $fields, $where, $replacements);
         if(sizeof($results) == 1) { $this->setSubItems($results[0]); return $results[0]; }
         else { return NULL; }
+    }
+
+    public function selectAfterOf($id)
+    {
+        $db = Repository::getDB();
+        $where = 'dato_id > :id';
+        $replacements = array('id' => $id);
+        $results = $db->select(self::$table, self::$selected_fields, $where, $replacements);
+        array_walk($results, array($this, 'setSubItems'));
+        return $results;
     }
 
     public function selectFiltered($filter)

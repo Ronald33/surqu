@@ -1,0 +1,21 @@
+{
+  "name": "Urqu",
+  "homepage": "https://github.com/Ronald33/surqu",
+  "authors": [
+    "Ronald Darwin <Ronald.dev1@gmail.com>"
+  ],
+  "description": "Urqu",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#^1.8.2",
+    "angular-google-chart": "^0.1.0"
+  }
+}

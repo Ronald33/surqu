@@ -24,7 +24,7 @@ class DatoController
             $this->dao->insert($dato);
             $this->view->s201($dato);
         }
-        // else if(isset($_GET['filter'])) { $this->view->s200($this->dao->selectFiltered($_GET['filter'])); }
+        else if(isset($_GET['id'])) { $this->view->s200($this->dao->selectAfterOf($_GET['id'])); }
         else { $this->view->s200($this->dao->selectAll()); }
     }
 

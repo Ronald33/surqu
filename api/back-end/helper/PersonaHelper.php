@@ -1,15 +1,15 @@
 <?php
-abstract class DatoHelper
+abstract class PersonaHelper
 {
-    public static function castToDato($object)
+    public static function castToPersona($object)
     {
         $response = Repository::getResponse();
-        $result = DatoValidator::validate($object);
+        $result = PersonaValidator::validate($object);
         
         if($result === true)
         {
-            $dato = Helper::cast('Dato', $object);
-            return $dato;
+            $Persona = Helper::cast('Persona', $object);
+            return $Persona;
         }
         else { $response->s400($result); }
     }
