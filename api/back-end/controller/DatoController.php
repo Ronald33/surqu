@@ -31,9 +31,8 @@ class DatoController
     public function post()
     {
         $object = Helper::getBodyRequest();
-        $dato = DatoHelper::castToDato($object);
-        $this->dao->insert($dato);
-        $this->view->s201($dato);
+
+        print_r($object);
     }
 
     public function put($id = null)
