@@ -7,9 +7,13 @@ function chartController($http, $interval, $window)
 {
     'use strict';
 
-    var api = 'http://localhost/surqu/api/';
     var vm = this;
+
+    var api = 'http://localhost/surqu/api/';
     var last_id = 0;
+
+    /* Descarga */
+    vm.descargar = descargar;
 
     vm.daterangepicker_options = 
     {
@@ -56,29 +60,15 @@ function chartController($http, $interval, $window)
         }, 
     }
 
-    vm.descargar = descargar;
-
     function descargar()
     {
         var inicio = vm.descarga.fecha.startDate.unix(), fin = vm.descarga.fecha.endDate.unix(), selecteds = [];
-
         angular.forEach(vm.descarga.selecteds, function(value, key) { if(value) { selecteds.push(key); } });
-
-        // console.log(selecteds);
-        var x = selecteds.join();
-        console.log(x);
-
-        $window.location.href = 'http://localhost/surqu/api/Dato?inicio=' + inicio + '&fin=' + fin+'&seleccionados=' + selecteds.join();
-
-        // $http.post(api + 'Dato', item).then(function(response)
-        // {
-        //     console.log(response);
-        // });
-
-        // console.log(x);
-        // console.log(y);
+        $window.location.href = api + '/Dato?inicio=' + inicio + '&fin=' + fin+'&seleccionados=' + selecteds.join();
     }
+    /* Fin de Descarga */
 
+    /* Gauge */
     function _getTemplateGauge(label)
     {
         return {
@@ -99,6 +89,13 @@ function chartController($http, $interval, $window)
         };
     }
 
+    vm.presion_gauge = _getTemplateGauge('Presión');
+    vm.humedad_gauge = _getTemplateGauge('Humedad');
+    vm.temperatura_gauge = _getTemplateGauge('Temperatura');
+    vm.temperaturaInterna_gauge = _getTemplateGauge('Temperatura Interna');
+    /* Fin de Gauge */
+
+    /* Lineal */
     function _getTemplateLineal()
     {
         return {
@@ -126,15 +123,12 @@ function chartController($http, $interval, $window)
     vm.humedad_lineal = _getTemplateLineal();
     vm.temperatura_lineal = _getTemplateLineal();
     vm.temperaturaInterna_lineal = _getTemplateLineal();
-    
-    vm.presion_gauge = _getTemplateGauge('Presión');
-    vm.humedad_gauge = _getTemplateGauge('Humedad');
-    vm.temperatura_gauge = _getTemplateGauge('Temperatura');
-    vm.temperaturaInterna_gauge = _getTemplateGauge('Temperatura Interna');
+    /* Fin de Lineal */
 
+    /* Alimentacion */
     function _updateData()
     {
-        $http.get(api + 'Dato', { params: {id: last_id} }).then(function(response)
+        $http.get(api + '/Dato', { params: {id: last_id} }).then(function(response)
         {
             if(response.data.length > 0)
             {
@@ -170,4 +164,5 @@ function chartController($http, $interval, $window)
 
     _updateData();
     $interval(_updateData, 5000);
+    /* Fin de Alimentacion */
 }
