@@ -2,8 +2,8 @@ var app = angular.module('app', ['googlechart', 'daterangepicker', 'ui.bootstrap
 
 angular.module('app').controller('ChartController', chartController);
 
-chartController.$inject = ['$http', '$interval'];
-function chartController($http, $interval)
+chartController.$inject = ['$http', '$interval', '$window'];
+function chartController($http, $interval, $window)
 {
     'use strict';
 
@@ -60,22 +60,20 @@ function chartController($http, $interval)
 
     function descargar()
     {
-        var item = angular.copy(vm.descarga);
-        item.fecha.startDate = item.fecha.startDate.unix();
-        item.fecha.endDate = item.fecha.endDate.unix();
+        var inicio = vm.descarga.fecha.startDate.unix(), fin = vm.descarga.fecha.endDate.unix(), selecteds = [];
 
-        // var fecha = vm.descarga.fecha;
-        // var x = fecha.startDate.unix();
-        // var y = fecha.endDate.unix();
+        angular.forEach(vm.descarga.selecteds, function(value, key) { if(value) { selecteds.push(key); } });
 
-        // console.log(vm.descarga.selecteds);
+        // console.log(selecteds);
+        var x = selecteds.join();
+        console.log(x);
 
-        console.log(item);
+        $window.location.href = 'http://localhost/surqu/api/Dato?inicio=' + inicio + '&fin=' + fin+'&seleccionados=' + selecteds.join();
 
-        $http.post(api + 'Dato', item).then(function(response)
-        {
-            console.log(response);
-        });
+        // $http.post(api + 'Dato', item).then(function(response)
+        // {
+        //     console.log(response);
+        // });
 
         // console.log(x);
         // console.log(y);

@@ -24,15 +24,42 @@ class DatoController
             $this->dao->insert($dato);
             $this->view->s201($dato);
         }
+        else if(isset($_GET['inicio']) && isset($_GET['fin']) && isset($_GET['seleccionados']))
+        {
+            $seleccionados = explode(',', $_GET['seleccionados']);
+
+            $datos = $this->dao->selectByRange($_GET['inicio'], $_GET['fin']);
+            $csv = [];
+            
+            $header = ['Fecha'];
+            if(in_array('presion', $seleccionados)) { array_push($header, 'Presión'); }
+            if(in_array('humedad', $seleccionados)) { array_push($header, 'Humedad'); }
+            if(in_array('temperatura', $seleccionados)) { array_push($header, 'Temperatura'); }
+            if(in_array('temperaturaInterna', $seleccionados)) { array_push($header, 'Temperatura Interna'); }
+
+            array_push($csv, $header);
+
+            foreach($datos as $dato)
+            {
+                $line = [date('d/m/Y h:i:s', $dato->fecha)];
+                if(in_array('presion', $seleccionados)) { array_push($line, $dato->presion); }
+                if(in_array('humedad', $seleccionados)) { array_push($line, $dato->humedad); }
+                if(in_array('temperatura', $seleccionados)) { array_push($line, $dato->temperatura); }
+                if(in_array('temperaturaInterna', $seleccionados)) { array_push($line, $dato->temperaturaInterna); }
+
+                array_push($csv, $line);
+            }
+
+            Helper::setHeaderDownload('milei.csv');
+            echo Helper::array2csv($csv);
+        }
         else if(isset($_GET['id'])) { $this->view->s200($this->dao->selectAfterOf($_GET['id'])); }
         else { $this->view->s200($this->dao->selectAll()); }
     }
 
     public function post()
     {
-        $object = Helper::getBodyRequest();
-
-        print_r($object);
+        
     }
 
     public function put($id = null)

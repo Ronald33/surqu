@@ -63,6 +63,16 @@ class DatoDAO implements IDatoDAO
         return $results;
     }
 
+    public function selectByRange($inicio, $fin)
+    {
+        $db = Repository::getDB();
+        $where = 'UNIX_TIMESTAMP(dato_fecha) >= :inicio && UNIX_TIMESTAMP(dato_fecha) <= :fin';
+        $replacements = array('inicio' => $inicio, 'fin' => $fin);
+        $results = $db->select(self::$table, self::$selected_fields, $where, $replacements);
+        array_walk($results, array($this, 'setSubItems'));
+        return $results;
+    }
+
     public function selectFiltered($filter)
     {
         $db = Repository::getDB();
